@@ -1,8 +1,57 @@
-@model Product
+@model IEnumerable<Assignment1.Models.Product>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Product List";
 }
 
-<h2>title</h2>
+<h2>Product List</h2>
+
+<!-- Filter Form -->
+<form method="get" class="mb-3">
+    <label for="category">Filter by Category:</label>
+    <input type="text" name="category" id="category" class="form-control d-inline w-auto" />
+    <button type="submit" class="btn btn-primary">Filter</button>
+    <a asp-action="Index" class="btn btn-secondary">Clear</a>
+</form>
+
+<!-- Add New Product Button -->
+<a asp-action="Create" class="btn btn-success mb-3">Add New Product</a>
+
+<!-- Product Table -->
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Low Stock Alert</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in Model)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>@product.Category</td>
+            <td>@product.Price.ToString("C")</td>
+            <td>@product.Quantity</td>
+            <td>
+                @if (product.Quantity < product.LowStockThreshold)
+                {
+                    <span class="badge badge-danger">Low Stock</span>
+                }
+                else
+                {
+                    <span class="badge badge-success">In Stock</span>
+                }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
