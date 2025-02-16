@@ -10,22 +10,33 @@
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Category" class="control-label"></label>
-        <input asp-for="Category" class="form-control" />
+        <select asp-for="Category" class="form-control">
+            <option value="">Select a category</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Name">@category.Name</option>
+            }
+        </select>
+        <span asp-validation-for="Category" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Price" class="control-label"></label>
         <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Quantity" class="control-label"></label>
         <input asp-for="Quantity" class="form-control" />
+        <span asp-validation-for="Quantity" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="LowStockThreshold" class="control-label"></label>
         <input asp-for="LowStockThreshold" class="form-control" />
+        <span asp-validation-for="LowStockThreshold" class="text-danger"></span>
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
@@ -35,3 +46,9 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

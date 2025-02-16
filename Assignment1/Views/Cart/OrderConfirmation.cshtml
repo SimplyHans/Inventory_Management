@@ -1,0 +1,36 @@
+@model Assignment1.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<h2>Order Confirmation</h2>
+
+<p>Order ID: @Model.OrderId</p>
+<p>Order Date: @Model.OrderDate.ToString("f")</p>
+
+<h3>Items</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.CartItems)
+    {
+        <tr>
+            <td>@item.Product.Name</td>
+            <td>@item.Product.Price.ToString("C")</td>
+            <td>@item.Quantity</td>
+            <td>@((item.Product.Price * item.Quantity).ToString("C"))</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>Total Quantity: @Model.TotalQuantity</p>
+<p>Total Price: @Model.TotalPrice.ToString("C")</p>
