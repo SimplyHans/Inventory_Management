@@ -4807,11 +4807,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Owner\\YR 2 Open Source Dev\\Assignment1\\Assignment1\\Assignment1.csproj",
+      "projectUniqueName": "C:\\Users\\Owner\\Downloads\\Anything (4)\\Anything\\comp2139_assignment1\\Assignment1\\Assignment1.csproj",
       "projectName": "Assignment1",
-      "projectPath": "C:\\Users\\Owner\\YR 2 Open Source Dev\\Assignment1\\Assignment1\\Assignment1.csproj",
+      "projectPath": "C:\\Users\\Owner\\Downloads\\Anything (4)\\Anything\\comp2139_assignment1\\Assignment1\\Assignment1.csproj",
       "packagesPath": "C:\\Users\\Owner\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Owner\\YR 2 Open Source Dev\\Assignment1\\Assignment1\\obj\\",
+      "outputPath": "C:\\Users\\Owner\\Downloads\\Anything (4)\\Anything\\comp2139_assignment1\\Assignment1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Owner\\AppData\\Roaming\\NuGet\\NuGet.Config",
