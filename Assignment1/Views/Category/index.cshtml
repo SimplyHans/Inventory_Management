@@ -1,0 +1,54 @@
+@model List<Assignment1.Models.Category>
+
+<h2>Categories</h2>
+
+<!-- Form for Creating a New Category -->
+<h3>Create New Category</h3>
+<form asp-action="Create" method="post" class="mb-4" id="createCategoryForm">
+    <div class="form-group">
+        <label for="Name">Category Name</label>
+        <input type="text" id="Name" name="Name" class="form-control" required />
+        <span class="text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Create</button>
+</form>
+
+<!-- Category Dropdown -->
+<div class="form-group mr-3">
+    <label for="category" class="mr-2">Category:</label>
+    <select class="form-control" id="category" name="category">
+        <option value="">All Categories</option>
+        @foreach (var category in Model)
+        {
+            <option value="@category.CategoryId">@category.Name</option>
+        }
+    </select>
+</div>
+
+<!-- Table for Displaying Categories -->
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var category in Model)
+    {
+        <tr>
+            <td>@category.CategoryId</td>
+            @* <td>@category.Name</td> *@
+            <td>
+
+                <!-- Delete Button -->
+                <form asp-action="Delete" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@category.CategoryId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
