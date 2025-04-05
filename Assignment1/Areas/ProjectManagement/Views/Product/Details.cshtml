@@ -1,0 +1,31 @@
+@model Assignment1.Areas.ProjectManagement.Models.Product
+
+@{
+    ViewData["Title"] = "Project Details"; // sets the title of the view to "Project Details
+}
+
+<h2>Project Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">@Model.Name</div>
+        @*<div class="card-text">@Model.Category</div>*@
+        
+        <dl class="row">
+            <dt class="col-sm-3">Product Id</dt>
+            <dt class="col-sm-9">@Model.Id</dt>
+            
+
+            <dt class="col-sm-3">Price</dt>
+            <dt class="col-sm-9">@Model.Price</dt>
+
+            <dt class="col-sm-3">Quantity</dt>
+            <dt class="col-sm-9">@Model.Quantity</dt>
+
+        </dl>
+    
+
+        
+        <a asp-controller="Product" asp-action="Index" class="btn btn-secondary">Back to Project List</a>
+    </div>
+</div>

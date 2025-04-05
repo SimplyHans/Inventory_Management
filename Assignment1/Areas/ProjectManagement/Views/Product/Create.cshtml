@@ -1,0 +1,49 @@
+@model Assignment1.Areas.ProjectManagement.Models.Product
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h2>Create Product</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Category" class="control-label"></label>
+        <input asp-for="Category" class="form-control" />
+    </div>
+
+    <div class="form-group mr-3">
+        <label for="category" class="mr-2">Category:</label>
+        <select class="form-control" id="category" name="category">
+            <option value="">All Categories</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Name" selected="@(Context.Request.Query["category"] == category.Name ? "selected" : null)">@category.Name</option>
+            }
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Quantity" class="control-label"></label>
+        <input asp-for="Quantity" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LowStockThreshold" class="control-label"></label>
+        <input asp-for="LowStockThreshold" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -4,22 +4,27 @@ using Assignment1.Models; // Ensure this matches your project's namespace
 using Microsoft.EntityFrameworkCore; // Add this for EF Core operations
 using System.Linq;
 using System.Threading.Tasks;
+using Assignment1.Areas.ProjectManagement.Models;
 
 namespace Assignment1.Controllers // Ensure this matches your project's namespace
 {
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<HomeController> _logger;
 
         // Inject ApplicationDbContext via constructor
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
+            _logger = logger;
             _context = context;
         }
 
         // GET: Home/Index
         public async Task<IActionResult> Index(string searchQuery, string category, string sortBy, bool lowStockFilter = false)
         {
+            _logger.LogInformation("Accessed HomeController Index at {Time}", DateTime.Now);
+            
             // Start with all products
             var productsQuery = _context.Products.AsQueryable();
 
@@ -109,6 +114,16 @@ namespace Assignment1.Controllers // Ensure this matches your project's namespac
                 TempData["ErrorMessage"] = "Category not found.";
             }
             return RedirectToAction(nameof(Index));
+        }
+        
+        public IActionResult NotFound(int statusCode)
+        {
+            _logger.LogWarning("Not Found invoked at {Time}", DateTime.Now);
+            if (statusCode == 404)
+            {
+                return View("NotFound");
+            }
+            return View("Error");
         }
     }
 }
