@@ -1,7 +1,9 @@
 using Assignment1.Data;
 using Microsoft.EntityFrameworkCore;
+using Assignment1.Services;
 using Serilog;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,9 @@ builder.Services
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration) //Read from the appsettings.json
     .CreateLogger();
+
+//Inject out SendGrid email sender
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
@@ -39,6 +44,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Project}/{action=Index}/{id?}"
+);
 
 app.MapControllerRoute(
     name: "default",
