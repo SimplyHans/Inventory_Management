@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Assignment1.Areas.ProjectManagement.Models;
 using Assignment1.Data; // Add this namespace for ApplicationDbContext
 using Microsoft.EntityFrameworkCore; // Add this for EF Core operations
+using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,85 +15,126 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
     {
         private readonly ILogger<ProductController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         // Inject ApplicationDbContext via constructor
-        public ProductController(ApplicationDbContext context, ILogger<ProductController> logger)
+        public ProductController(ApplicationDbContext context, ILogger<ProductController> logger, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Product/Index
         public async Task<IActionResult> Index(string searchQuery, string category, string sortBy, bool lowStockFilter = false)
         {
-            // Start with all products
-            var productsQuery = _context.Products.AsQueryable();
-
-            // Apply search filter
-            if (!string.IsNullOrEmpty(searchQuery))
+            try
             {
-                productsQuery = productsQuery.Where(p => p.Name.Contains(searchQuery));
-            }
+                // Start with all products
+                var productsQuery = _context.Products.AsQueryable();
 
-            // Apply category filter
-            if (!string.IsNullOrEmpty(category))
-            {
-                productsQuery = productsQuery.Where(p => p.Category == category);
-            }
+                // Apply search filter
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    productsQuery = productsQuery.Where(p => p.Name.Contains(searchQuery));
+                }
 
-            // Apply low stock filter
-            if (lowStockFilter)
-            {
-                productsQuery = productsQuery.Where(p => p.Quantity < p.LowStockThreshold);
-            }
+                // Apply category filter
+                if (!string.IsNullOrEmpty(category))
+                {
+                    productsQuery = productsQuery.Where(p => p.Category == category);
+                }
 
-            // Apply sorting
-            switch (sortBy)
-            {
-                case "name_asc":
-                    productsQuery = productsQuery.OrderBy(p => p.Name);
-                    break;
-                case "name_desc":
-                    productsQuery = productsQuery.OrderByDescending(p => p.Name);
-                    break;
-                case "price_asc":
-                    productsQuery = productsQuery.OrderBy(p => p.Price);
-                    break;
-                case "price_desc":
-                    productsQuery = productsQuery.OrderByDescending(p => p.Price);
-                    break;
-                default:
-                    productsQuery = productsQuery.OrderBy(p => p.Name); // Default sorting
-                    break;
-            }
+                // Apply low stock filter
+                if (lowStockFilter)
+                {
+                    productsQuery = productsQuery.Where(p => p.Quantity < p.LowStockThreshold);
+                }
 
-            // Fetch categories for the dropdown
-            var categories = await _context.Categories.ToListAsync();
+                // Apply sorting
+                switch (sortBy)
+                {
+                    case "name_asc":
+                        productsQuery = productsQuery.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        productsQuery = productsQuery.OrderByDescending(p => p.Name);
+                        break;
+                    case "price_asc":
+                        productsQuery = productsQuery.OrderBy(p => p.Price);
+                        break;
+                    case "price_desc":
+                        productsQuery = productsQuery.OrderByDescending(p => p.Price);
+                        break;
+                    default:
+                        productsQuery = productsQuery.OrderBy(p => p.Name); // Default sorting
+                        break;
+                }
 
-            // Pass categories to the view using ViewBag
-            ViewBag.Categories = categories;
+                // Fetch categories for the dropdown
+                var categories = await _context.Categories.ToListAsync();
 
-            // Execute the query and pass products to the view
-            var products = await productsQuery.ToListAsync();
+                // Pass categories to the view using ViewBag
+                ViewBag.Categories = categories;
+
+                // Execute the query and pass products to the view
+                var products = await productsQuery.ToListAsync();
             
-            _logger.LogInformation("Accessed ProductController Index at {Time}", DateTime.Now);
-            return View(products);
+                _logger.LogInformation("Accessed ProductController Index at {Time}", DateTime.Now);
+                return View(products);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching products at {Time}", DateTime.Now);
+                TempData["ErrorMessage"] = "An error occurred while fetching the products. Please try again later.";
+                return View();
+            }
         }
 
         // GET: Product/Create
         public async Task<IActionResult> Create()
         {
-            // Fetch categories for the dropdown
-            var categories = await _context.Categories.ToListAsync();
-            ViewBag.Categories = categories;
-            return View();
+            try
+            {
+                // Fetch categories for the dropdown
+                var categories = await _context.Categories.ToListAsync();
+                ViewBag.Categories = categories;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching categories for product creation.");
+                TempData["ErrorMessage"] = "An error occurred while loading the page. Please try again later.";
+                return View();
+
+            }
         }
 
+        private async Task<bool> IsUserAdmin()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Check the IsAdmin property of the user
+            return user.IsAdmin;
+        }
+
+        
         // POST: Product/Create
         [HttpPost]
         [ValidateAntiForgeryToken] // Add anti-forgery token for security
         public async Task<IActionResult> Create(Product product)
         {
+            if (!await IsUserAdmin())
+            {
+                _logger.LogWarning("Permission to create product was denied.");
+                TempData["ErrorMessage"] = "You do not have permission to create a product.";
+                return RedirectToAction(nameof(Index));
+            }
+            
             if (ModelState.IsValid)
             {
                 // Add the product to the database
@@ -108,16 +150,26 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             TempData["ErrorMessage"] = "Failed to create product. Please check your input.";
             return View(product);
         }
+        
         [HttpGet]
         public IActionResult Details(int id)
         {
-            // Retrieves the product with the specified ID or returns null if not found
-            var product = _context.Products.FirstOrDefault(p => p.Id == id);
-            if (product == null)
+            try
             {
-                return NotFound(); // 404 not found error
+                // Retrieves the product with the specified ID or returns null if not found
+                var product = _context.Products.FirstOrDefault(p => p.Id == id);
+                if (product == null)
+                {
+                    return NotFound(); // 404 not found error
+                }
+                return View(product);
             }
-            return View(product);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while checking details at {Time}", DateTime.Now);
+                TempData["ErrorMessage"] = "An error occurred while checking details. Please try again later.";
+                return View();
+            }
         }
 
         // GET: Product/Edit/5
@@ -130,11 +182,20 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
                 return NotFound();
             }
 
-            // Fetch categories for the dropdown
-            var categories = await _context.Categories.ToListAsync();
-            ViewBag.Categories = categories;
+            try
+            {
+                // Fetch categories for the dropdown
+                var categories = await _context.Categories.ToListAsync();
+                ViewBag.Categories = categories;
 
-            return View(product);
+                return View(product);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while editing at {Time}", DateTime.Now);
+                TempData["ErrorMessage"] = "An error occurred while editing. Please try again later.";
+                return View();
+            }
         }
 
         // POST: Product/Edit/5
@@ -142,6 +203,13 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         [ValidateAntiForgeryToken] // Add anti-forgery token for security
         public async Task<IActionResult> Edit(int id, Product product)
         {
+            if (!await IsUserAdmin())
+            {
+                _logger.LogWarning("Permission to edit product was denied.");
+                TempData["ErrorMessage"] = "You do not have permission to edit a product.";
+                return RedirectToAction(nameof(Index));
+            }
+            
             if (id != product.Id)
             {
                 return NotFound();
@@ -205,6 +273,12 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             else
             {
                 TempData["ErrorMessage"] = "Product not found.";
+            }
+            if (!await IsUserAdmin())
+            {
+                _logger.LogWarning("Permission to delete product was denied.");
+                TempData["ErrorMessage"] = "You do not have delete to create a product.";
+                return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
         }

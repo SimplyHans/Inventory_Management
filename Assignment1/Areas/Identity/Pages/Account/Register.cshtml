@@ -3,11 +3,6 @@
 @{
     ViewData["Title"] = "Register";
 }
-<div class="center-wrapper">
-    <h1>@ViewData["Title"]</h1><br/>
-    <h2>Create a new account.</h2>
-</div>
-
 <style>
     .center-wrapper {
         display: flex;
@@ -17,7 +12,15 @@
 </style>
 
 <div class="center-wrapper">
-    <div class="col-md-4">
+    <h1>@ViewData["Title"]</h1>
+
+</div>
+<div class="center-wrapper">
+    <h2>Create a new account.</h2>
+</div>
+
+<div class="center-wrapper">
+    <div style="width: 40%;">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
@@ -65,7 +68,7 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-success">Register</button>
         </form>
     </div>
     

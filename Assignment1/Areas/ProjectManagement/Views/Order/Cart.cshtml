@@ -1,0 +1,54 @@
+@model List<Assignment1.Areas.ProjectManagement.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Your Shopping Cart";
+    decimal grandTotal = Model.Sum(item => item.UnitPrice * item.Quantity);
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (!Model.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Action</th> <!-- 👈 NEW -->
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>$@item.UnitPrice</td>
+                <td>@item.Quantity</td>
+                <td>$@(item.UnitPrice * item.Quantity)</td>
+                <td>
+                    <form asp-action="RemoveFromCart" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3"><strong>Grand Total</strong></td>
+            <td colspan="2"><strong>$@grandTotal</strong></td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <form asp-action="PlaceOrder" method="post">
+        <button type="submit" class="btn btn-success mt-3">Place Order</button>
+    </form>
+}

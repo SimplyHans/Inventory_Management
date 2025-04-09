@@ -89,10 +89,10 @@
                             }
                         </td>
                         <td>
-                            <form asp-controller="OrderList" asp-action="AddToOrderList" method="post">
+                            <form asp-area="ProjectManagement" asp-controller="Order" asp-action="AddToCart" method="post">
                                 <input type="hidden" name="productId" value="@product.Id" />
                                 <input type="number" name="quantity" value="1" min="1" max="@product.Quantity" class="form-control d-inline-block w-auto mr-2" />
-                                <button type="submit" class="btn btn-success">Add to Order</button>
+                                <button type="submit" class="btn btn-success">Add to Cart</button>
                             </form>
                         </td>
                     </tr>

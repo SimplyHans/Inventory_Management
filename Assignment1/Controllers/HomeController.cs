@@ -116,6 +116,8 @@ namespace Assignment1.Controllers // Ensure this matches your project's namespac
             return RedirectToAction(nameof(Index));
         }
         
+        
+        
         public IActionResult NotFound(int statusCode)
         {
             _logger.LogWarning("Not Found invoked at {Time}", DateTime.Now);
