@@ -32,12 +32,13 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             {
                 // Start with all products
                 var productsQuery = _context.Products.AsQueryable();
-
-                // Apply search filter
+                
+                // Apply search filter (case-insensitive)
                 if (!string.IsNullOrEmpty(searchQuery))
                 {
-                    productsQuery = productsQuery.Where(p => p.Name.Contains(searchQuery));
+                    productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(searchQuery.ToLower()));
                 }
+
 
                 // Apply category filter
                 if (!string.IsNullOrEmpty(category))
@@ -282,4 +283,49 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             }
             return RedirectToAction(nameof(Index));
         }
+        
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchQuery, string category, string sortBy, bool lowStockFilter = false)
+        {
+            var productsQuery = _context.Products.AsQueryable();
+            
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(searchQuery.ToLower()));
+            }
+
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                productsQuery = productsQuery.Where(p => p.Category == category);
+            }
+
+            if (lowStockFilter)
+            {
+                productsQuery = productsQuery.Where(p => p.Quantity < p.LowStockThreshold);
+            }
+
+            switch (sortBy)
+            {
+                case "name_asc":
+                    productsQuery = productsQuery.OrderBy(p => p.Name);
+                    break;
+                case "name_desc":
+                    productsQuery = productsQuery.OrderByDescending(p => p.Name);
+                    break;
+                case "price_asc":
+                    productsQuery = productsQuery.OrderBy(p => p.Price);
+                    break;
+                case "price_desc":
+                    productsQuery = productsQuery.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    productsQuery = productsQuery.OrderBy(p => p.Name);
+                    break;
+            }
+
+            var products = await productsQuery.ToListAsync();
+            return PartialView("_ProductTablePartial", products);
+        }
+
     }

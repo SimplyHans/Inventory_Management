@@ -61,7 +61,10 @@
 <!-- Product Table -->
 <div class="container">
     <h3>Featured Products</h3>
-    <table class="table table-bordered table-striped">
+    <div id="loadingScreen" style="display:none; margin-top: 20px; text-align: center;">
+        <div class="spinner-border text-primary" role="status"/>
+    </div>
+    <table id="productTable" class="table table-bordered table-striped">
         <thead class="thead-dark">
         <tr>
             <th>Name</th>
@@ -72,40 +75,82 @@
             <th>Actions</th>
         </tr>
         </thead>
-        <tbody>
-        @if (Model != null) // Check if Model is null
-        {
-            @foreach (var product in Model)
-            {
-                <tr>
-                    <td>@product.Name</td>
-                    <td>@product.Category</td>
-                    <td>@product.Price.ToString("C")</td>
-                    <td>@product.Quantity</td>
-                    <td>
-                        @if (product.Quantity < product.LowStockThreshold)
-                        {
-                            <span class="badge badge-danger" style="background-color: #dc3545; color: white;">Low Stock</span>
-                        }
-                        else
-                        {
-                            <span class="badge badge-success" style="background-color: #28a745; color: white;">In Stock</span>
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary btn-sm">Details</a>
-                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6" class="text-center">No products available.</td>
-            </tr>
-        }
+        
+
+        <tbody id="productTableBody">
+        @await Html.PartialAsync("_ProductTablePartial", Model)
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script>
+        // Hide the loading screen initially
+        $(document).ready(function () {
+            $("#loadingScreen").hide();
+        });
+
+        // Function to load products via AJAX
+        function loadProducts() {
+            // Show the loading spinner when AJAX request starts
+            $("#loadingScreen").show();
+
+            // Hide the product table while loading
+            $("#productTable").hide();
+
+            let query = $("#searchQuery").val();
+            let category = $("#category").val();
+            let sortBy = $("#sortBy").val();
+            let lowStockFilter = $("#lowStockFilter").is(":checked");
+
+            // Perform the AJAX request
+            $.ajax({
+                url: '@Url.Action("Search", "Product", new { area = "ProjectManagement" })',
+                data: {
+                    searchQuery: query,
+                    category: category,
+                    sortBy: sortBy,
+                    lowStockFilter: lowStockFilter
+                },
+                type: "GET", // Ensure the request is GET
+                success: function (result) {
+                    // Introduce a delay (e.g., 1 second) before hiding the loading screen and showing the data
+                    setTimeout(function() {
+                        // Hide the loading spinner after the data is loaded
+                        $("#loadingScreen").hide();
+
+                        // Update the product table with the new data
+                        $("#productTableBody").html(result);
+
+                        // Show the table once the data has been updated
+                        $("#productTable").show();
+                    }, 200);
+                },
+                error: function () {
+                    // Hide the loading spinner if there's an error
+                    $("#loadingScreen").hide();
+                    alert("An error occurred while loading the data.");
+                }
+            });
+        }
+
+        // Trigger the loadProducts function only when the search query or filters change
+        $(document).ready(function () {
+            // Trigger AJAX when any search/filter input changes
+            $("#searchQuery, #category, #sortBy, #lowStockFilter").on("change keyup", function () {
+                loadProducts();
+            });
+
+            // Optional: Trigger search when pressing "Enter" in the search box
+            $("#searchQuery").on("keypress", function (e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    loadProducts();
+                }
+            });
+        });
+    </script>
+}
+
+
+

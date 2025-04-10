@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "RR99XYe9sfbra6gYyObszhXlyCGR3A37LrGQ7HWfaoc=",
+  "Hash": "G0Uc2d57lCfi85N1UVlVYo7C2m/uIcEXEbWVUipY6l8=",
   "Source": "Assignment1",
   "BasePath": "_content/Assignment1",
   "Mode": "Default",
@@ -1193,6 +1193,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Assignment1.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\wwwroot\\css\\loading.css",
+      "SourceId": "Assignment1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\wwwroot\\",
+      "BasePath": "_content/Assignment1",
+      "RelativePath": "css/loading.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\loading.css"
     },
     {
       "Identity": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\wwwroot\\css\\site.css",
