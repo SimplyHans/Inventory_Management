@@ -1,32 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\Assignment1.csproj": {}
+    "C:\\Users\\jarga\\OneDrive\\Documents\\NEWEST_comp2139_assign2\\comp2139_assignment1\\Assignment1\\Assignment1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\Assignment1.csproj": {
+    "C:\\Users\\jarga\\OneDrive\\Documents\\NEWEST_comp2139_assign2\\comp2139_assignment1\\Assignment1\\Assignment1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\Assignment1.csproj",
+        "projectUniqueName": "C:\\Users\\jarga\\OneDrive\\Documents\\NEWEST_comp2139_assign2\\comp2139_assignment1\\Assignment1\\Assignment1.csproj",
         "projectName": "Assignment1",
-        "projectPath": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\Assignment1.csproj",
-        "packagesPath": "C:\\Users\\Owner\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\obj\\",
+        "projectPath": "C:\\Users\\jarga\\OneDrive\\Documents\\NEWEST_comp2139_assign2\\comp2139_assignment1\\Assignment1\\Assignment1.csproj",
+        "packagesPath": "C:\\Users\\jarga\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jarga\\OneDrive\\Documents\\NEWEST_comp2139_assign2\\comp2139_assignment1\\Assignment1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Owner\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jarga\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net9.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net9.0": {
+            "targetAlias": "net9.0",
             "projectReferences": {}
           }
         },
@@ -34,11 +34,17 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
@@ -112,7 +118,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\jarga\\.dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
