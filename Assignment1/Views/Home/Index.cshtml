@@ -4,115 +4,199 @@
     ViewData["Title"] = "Home";
 }
 
-<h2>Welcome to Our Store</h2>
+<style>
+    .center-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
 
-<!-- Filters Section -->
-<div class="container mb-4">
-    <form method="get" asp-action="Index" class="form-inline">
-        <!-- Search by Name -->
-        <div class="form-group mr-3">
-            <label for="searchQuery" class="mr-2">Search:</label>
-            <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Product name..." value="@Context.Request.Query["searchQuery"]">
-        </div>
+    .home-container {
+        width: 100%;
+        max-width: 1400px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+    }
 
-        <!-- Category Dropdown -->
-        <div class="form-group mr-3">
-            <label for="category" class="mr-2">Category:</label>
-            <select class="form-control" id="category" name="category">
-                <option value="">All Categories</option>
-                @foreach (var category in Model.Categories)
-                {
-                    <option value="@category.Name" selected="@(Context.Request.Query["category"] == category.Name ? "selected" : null)">@category.Name</option>
-                }
-            </select>
-        </div>
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
 
-        <!-- Sort By Dropdown -->
-        <div class="form-group mr-3">
-            <label for="sortBy" class="mr-2">Sort By:</label>
-            <select class="form-control" id="sortBy" name="sortBy">
-                <option value="">Default</option>
-                <option value="name_asc" selected="@(Context.Request.Query["sortBy"] == "name_asc" ? "selected" : null)">Name (A-Z)</option>
-                <option value="name_desc" selected="@(Context.Request.Query["sortBy"] == "name_desc" ? "selected" : null)">Name (Z-A)</option>
-                <option value="price_asc" selected="@(Context.Request.Query["sortBy"] == "price_asc" ? "selected" : null)">Price (Low to High)</option>
-                <option value="price_desc" selected="@(Context.Request.Query["sortBy"] == "price_desc" ? "selected" : null)">Price (High to Low)</option>
-            </select>
-        </div>
+    .filter-row .form-group {
+        flex: 1;
+        min-width: 200px;
+    }
 
-        <!-- Low Stock Checkbox -->
-        <div class="form-group mr-3">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="lowStockFilter" name="lowStockFilter" value="true" @(Context.Request.Query["lowStockFilter"] == "true" ? "checked" : "")>
-                <label class="form-check-label" for="lowStockFilter">Show Low Stock Only</label>
+    .form-control, .btn {
+        border-radius: 0.75rem;
+    }
+
+    .table {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    /* Circular checkbox */
+    .form-check-input {
+        border-radius: 50% !important;
+        width: 2.25rem;
+        height: 2.25rem;
+        margin-top: 0.15rem; /* adjust vertical alignment */
+        margin-right: 0.5rem;
+        border: 1px solid #ccc;
+    }
+    
+
+    #loadingScreen {
+        margin: 2rem 0;
+    }
+</style>
+
+<div class="center-wrapper">
+    <div class="home-container">
+
+        <!-- Filters Section -->
+        <form method="get" asp-action="Index" class="filter-row">
+            <!-- Search -->
+            <div class="form-group">
+                <label for="searchQuery">Search:</label>
+                <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Product name..." value="@Context.Request.Query["searchQuery"]">
             </div>
+
+            <!-- Category -->
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select class="form-control" id="category" name="category">
+                    <option value="">All Categories</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Name" selected="@(Context.Request.Query["category"] == category.Name ? "selected" : null)">
+                            @category.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Sort By -->
+            <div class="form-group">
+                <label for="sortBy">Sort By:</label>
+                <select class="form-control" id="sortBy" name="sortBy">
+                    <option value="">Default</option>
+                    <option value="name_asc" selected="@(Context.Request.Query["sortBy"] == "name_asc" ? "selected" : null)">Name (A-Z)</option>
+                    <option value="name_desc" selected="@(Context.Request.Query["sortBy"] == "name_desc" ? "selected" : null)">Name (Z-A)</option>
+                    <option value="price_asc" selected="@(Context.Request.Query["sortBy"] == "price_asc" ? "selected" : null)">Price (Low to High)</option>
+                    <option value="price_desc" selected="@(Context.Request.Query["sortBy"] == "price_desc" ? "selected" : null)">Price (High to Low)</option>
+                </select>
+            </div>
+
+            <!-- Low Stock Filter -->
+            <div class="form-group d-flex align-items-end">
+                <label class="d-flex align-items-center">
+                    <input class="form-check-input" type="checkbox" id="lowStockFilter" name="lowStockFilter" value="true"
+                           @(Context.Request.Query["lowStockFilter"] == "true" ? "checked" : "")>
+                    <span class="ml-2">Low Stock Only</span>
+                </label>
+            </div>
+
+        </form>
+
+        <!-- Error Message -->
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger mt-3">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Products Table -->
+        <div id="loadingScreen" style="display:none; text-align: center;">
+            <div class="spinner-border text-primary" role="status"></div>
         </div>
 
-        <!-- Apply Filters Button -->
-        <button type="submit" class="btn btn-primary">Apply Filters</button>
-        <a asp-action="Index" class="btn btn-secondary ml-2">Clear Filters</a>
-    </form>
-</div>
-
-<!-- Product Table -->
-<div class="container">
-    <h3>Featured Products</h3>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Stock Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            @if (Model.Products != null && Model.Products.Any())
-            {
-                @foreach (var product in Model.Products)
-                {
-                    <tr>
-                        <td>@product.Name</td>
-                        <td>@product.Category</td>
-                        <td>@product.Price.ToString("C")</td>
-                        <td>@product.Quantity</td>
-                        <td>
-                            @if (product.Quantity < product.LowStockThreshold)
-                            {
-                                <span class="badge" style="background-color: #dc3545; color: white;">Low Stock</span>
-                            }
-                            else
-                            {
-                                <span class="badge" style="background-color: #28a745; color: white;">In Stock</span>
-                            }
-                        </td>
-                        <td>
-                            <form asp-area="ProjectManagement" asp-controller="Order" asp-action="AddToCart" method="post">
-                                <input type="hidden" name="productId" value="@product.Id" />
-                                <input type="number" name="quantity" value="1" min="1" max="@product.Quantity" class="form-control d-inline-block w-auto mr-2" />
-                                <button type="submit" class="btn btn-success">Add to Cart</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6" class="text-center">No products available.</td>
+        <div class="table-responsive">
+            <table id="productTable" class="table table-bordered table-striped mt-3">
+                <thead class="thead-dark">
+                <tr class="bg-primary text-white">
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Stock Status</th>
+                    <th>Actions</th>
                 </tr>
-            }
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="productTableBody">
+                @await Html.PartialAsync("_HomeTablePartial", Model)
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<!-- Error Message Display -->
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
-    </div>
+@section Scripts {
+    <script>
+        // Function to load products via AJAX
+        function loadProducts() {
+            // Show the loading spinner when AJAX request starts
+            $("#loadingScreen").show();
+
+            // Hide the product table while loading
+            $("#productTable").hide();
+
+            let query = $("#searchQuery").val();
+            let category = $("#category").val();
+            let sortBy = $("#sortBy").val();
+            let lowStockFilter = $("#lowStockFilter").is(":checked");
+
+            // Perform the AJAX request
+            $.ajax({
+                url: '@Url.Action("Search", "Home")',
+                data: {
+                    searchQuery: query,
+                    category: category,
+                    sortBy: sortBy,
+                    lowStockFilter: lowStockFilter
+                },
+                type: "GET", // Ensure the request is GET
+                success: function (result) {
+                    // Introduce a delay (e.g., 1 second) before hiding the loading screen and showing the data
+                    setTimeout(function() {
+                        // Hide the loading spinner after the data is loaded
+                        $("#loadingScreen").hide();
+
+                        // Update the product table with the new data
+                        $("#productTableBody").html(result);
+
+                        // Show the table once the data has been updated
+                        $("#productTable").show();
+                    }, 1000);  // 1000 milliseconds = 1 second delay
+                },
+                error: function () {
+                    // Hide the loading spinner if there's an error
+                    $("#loadingScreen").hide();
+                    alert("An error occurred while loading the data.");
+                }
+            });
+        }
+
+        // Trigger the loadProducts function only when the search query or filters change
+        $(document).ready(function () {
+            // Trigger AJAX when any search/filter input changes
+            $("#searchQuery, #category, #sortBy, #lowStockFilter").on("change keyup", function () {
+                loadProducts();
+            });
+
+            // Optional: Trigger search when pressing "Enter" in the search box
+            $("#searchQuery").on("keypress", function (e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    loadProducts();
+                }
+            });
+        });
+    </script>
 }

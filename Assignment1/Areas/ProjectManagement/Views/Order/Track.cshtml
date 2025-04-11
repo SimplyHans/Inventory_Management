@@ -1,5 +1,50 @@
 @model List<Assignment1.Areas.ProjectManagement.Models.Order>
 
+<style>
+    h2 {
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .table {
+        border-radius: 1rem;
+        overflow: hidden;
+        background-color: white;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    .table thead {
+        color: white;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table th {
+        background-color: #007bff;
+    }
+
+    .btn-danger {
+        border-radius: 0.5rem;
+        padding: 0.375rem 0.75rem;
+    }
+
+    tfoot td {
+        font-weight: 600;
+        background-color: #f8f9fa;
+    }
+
+    .alert-info {
+        background-color: #e9f7ff;
+        color: #31708f;
+        border-color: #bce8f1;
+        border-radius: 0.5rem;
+        padding: 1rem;
+    }
+</style>
+
 @{
     ViewData["Title"] = "Your Orders";
 }
@@ -12,9 +57,14 @@
 }
 else
 {
-    <table class="table table-striped">
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info mt-3">@TempData["Message"]</div>
+    }
+    
+    <table class="table table-bordered">
         <thead>
-        <tr>
+        <tr class="bg-primary">
             <th>Order ID</th>
             <th>Customer</th>
             <th>Email</th>
@@ -41,9 +91,4 @@ else
         }
         </tbody>
     </table>
-}
-
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-info mt-3">@TempData["Message"]</div>
 }

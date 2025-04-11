@@ -31,7 +31,7 @@ namespace Assignment1.Controllers // Ensure this matches your project's namespac
             // Apply search filter
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                productsQuery = productsQuery.Where(p => p.Name.Contains(searchQuery));
+                productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(searchQuery.ToLower()));
             }
 
             // Apply category filter
@@ -127,5 +127,71 @@ namespace Assignment1.Controllers // Ensure this matches your project's namespac
             }
             return View("Error");
         }
+        
+        // Action to handle AJAX request for filtered products
+        public async Task<IActionResult> Search(string searchQuery, string category, string sortBy, bool lowStockFilter = false)
+        {
+            try
+            {
+// Same logic as the Index method but without returning the full page
+                var productsQuery = _context.Products.AsQueryable();
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(searchQuery.ToLower()));
+                }
+
+                if (!string.IsNullOrEmpty(category))
+                {
+                    productsQuery = productsQuery.Where(p => p.Category == category);
+                }
+
+                if (lowStockFilter)
+                {
+                    productsQuery = productsQuery.Where(p => p.Quantity < p.LowStockThreshold);
+                }
+
+                switch (sortBy)
+                {
+                    case "name_asc":
+                        productsQuery = productsQuery.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        productsQuery = productsQuery.OrderByDescending(p => p.Name);
+                        break;
+                    case "price_asc":
+                        productsQuery = productsQuery.OrderBy(p => p.Price);
+                        break;
+                    case "price_desc":
+                        productsQuery = productsQuery.OrderByDescending(p => p.Price);
+                        break;
+                    default:
+                        productsQuery = productsQuery.OrderBy(p => p.Name);
+                        break;
+                }
+
+                var products = await productsQuery.ToListAsync();
+                var categories = await _context.Categories.ToListAsync();
+
+                // Create the ViewModel
+                var viewModel = new HomeIndexViewModel
+                {
+                    Products = products,
+                    Categories = categories
+                };
+                _logger.LogInformation("Search returned {Count} products at {Time}", products.Count, DateTime.Now);
+                // Return the partial view with the model
+                return PartialView("_HomeTablePartial", viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occurred while fetching products: {Message}", ex.Message);
+                return StatusCode(500, "Internal Server Error");
+            }
+            
+        }
+
+
+
     }
 }

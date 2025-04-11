@@ -9,22 +9,37 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
+        margin-top: 2rem;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 500px;
+        padding: 1rem;
+    }
+
+    .form-control, .btn {
+        border-radius: 0.75rem;
+    }
+
+    .form-check-input {
+        border-radius: 0.35rem;
+    }
+
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 1rem;
     }
 </style>
 
 <div class="center-wrapper">
     <h1>@ViewData["Title"]</h1>
-</div>
-<div class="center-wrapper">
     <h2>Use a local account to log in.</h2>
-</div>
 
-
-<div class="center-wrapper">
-    <div style="width: 40%;">
+    <div class="login-container">
         <section>
             <form id="account" method="post">
-                <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -36,16 +51,16 @@
                     <label asp-for="Input.Password" class="form-label">Password</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label asp-for="Input.RememberMe" class="form-check-label">
                         @Html.DisplayNameFor(m => m.Input.RememberMe)
                     </label>
                 </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-success">Log in</button>
+                <div class="d-grid mb-3">
+                    <button id="login-submit" type="submit" class="btn btn-primary btn-lg">Log in</button>
                 </div>
-                <div>
+                <div class="text-center">
                     <p>
                         <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
                     </p>
@@ -59,7 +74,6 @@
             </form>
         </section>
     </div>
-    
 </div>
 
 @section Scripts {

@@ -8,21 +8,31 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
+    }
+
+    .register-container {
+        width: 100%;
+        max-width: 600px;
+        padding: 1rem;
+    }
+
+    .form-control, .btn {
+        border-radius: 0.75rem;
+    }
+
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 1rem;
     }
 </style>
 
 <div class="center-wrapper">
     <h1>@ViewData["Title"]</h1>
-
-</div>
-<div class="center-wrapper">
     <h2>Create a new account.</h2>
-</div>
 
-<div class="center-wrapper">
-    <div style="width: 40%;">
+    <div class="register-container">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -41,10 +51,9 @@
                 </div>
             </div>
 
-            
             <div class="form-floating mb-3">
                 <select asp-for="Input.PreferredCategory" class="form-control" id="category" name="category">
-                    <option value="">Select preferred category</option>
+                    <option value="">None</option>
                     @foreach (var category in Model.Categories)
                     {
                         <option value="@category.Name">@category.Name</option>
@@ -68,10 +77,11 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-success">Register</button>
+            <div class="d-grid">
+                <button id="registerSubmit" type="submit" class="btn btn-primary btn-lg">Register</button>
+            </div>
         </form>
     </div>
-    
 </div>
 
 @section Scripts {

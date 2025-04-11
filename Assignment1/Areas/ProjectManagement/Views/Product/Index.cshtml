@@ -4,25 +4,72 @@
     ViewData["Title"] = "Inventory Management";
 }
 
-<h2>@ViewData["Title"]</h2>
+<style>
+    .product-index-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
 
-<!-- Add New Product Button -->
-<a asp-action="Create" class="btn btn-success mb-3">Create Product</a>
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        align-items: flex-end;
+    }
 
-<a asp-controller="Category" asp-action="Index" class="btn btn-success mb-3">Add New Category</a>
+    .filter-row .form-group {
+        flex: 1;
+        min-width: 200px;
+    }
 
-<!-- Filters Section -->
-<div class="container mb-4">
-    <form method="get" asp-action="Index" class="form-inline">
-        <!-- Search by Name -->
-        <div class="form-group mr-3">
-            <label for="searchQuery" class="mr-2">Search:</label>
+    .form-control, .btn {
+        border-radius: 0.75rem;
+    }
+
+    .form-check-input {
+        border-radius: 50% !important;
+        width: 2.25rem;
+        height: 2.25rem;
+        margin-top: 0.15rem;
+        margin-right: 0.5rem;
+        border: 1px solid #ccc;
+    }
+    
+
+    .btn-success {
+        margin-right: 1rem;
+    }
+
+    .table {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    h2 {
+        text-align: center;
+    }
+</style>
+
+<div class="product-index-container">
+    <h2 class="mb-2 fw-semibold text-start">@ViewData["Title"]</h2>
+
+
+    <div class="d-flex mb-3">
+        <a asp-action="Create" class="btn btn-success">Create Product</a>
+        <a asp-controller="Category" asp-action="Index" class="btn btn-success">Add New Category</a>
+    </div>
+
+    <form method="get" asp-action="Index" class="filter-row">
+        <!-- Search -->
+        <div class="form-group">
+            <label for="searchQuery">Search:</label>
             <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Product name..." value="@Context.Request.Query["searchQuery"]">
         </div>
 
-        <!-- Category Dropdown -->
-        <div class="form-group mr-3">
-            <label for="category" class="mr-2">Category:</label>
+        <!-- Category -->
+        <div class="form-group">
+            <label for="category">Category:</label>
             <select class="form-control" id="category" name="category">
                 <option value="">All Categories</option>
                 @foreach (var category in ViewBag.Categories)
@@ -32,9 +79,9 @@
             </select>
         </div>
 
-        <!-- Sort By Dropdown -->
-        <div class="form-group mr-3">
-            <label for="sortBy" class="mr-2">Sort By:</label>
+        <!-- Sort By -->
+        <div class="form-group">
+            <label for="sortBy">Sort By:</label>
             <select class="form-control" id="sortBy" name="sortBy">
                 <option value="">Default</option>
                 <option value="name_asc" selected="@(Context.Request.Query["sortBy"] == "name_asc" ? "selected" : null)">Name (A-Z)</option>
@@ -45,42 +92,46 @@
         </div>
 
         <!-- Low Stock Checkbox -->
-        <div class="form-group mr-3">
-            <div class="form-check">
+        <div class="form-group d-flex align-items-end">
+            <label class="d-flex align-items-center">
                 <input class="form-check-input" type="checkbox" id="lowStockFilter" name="lowStockFilter" value="true" @(Context.Request.Query["lowStockFilter"] == "true" ? "checked" : "")>
-                <label class="form-check-label" for="lowStockFilter">Show Low Stock Only</label>
-            </div>
+                <span class="ml-2">Show Low Stock Only</span>
+            </label>
         </div>
-
-        <!-- Apply Filters Button -->
-        <button type="submit" class="btn btn-primary">Apply Filters</button>
-        <a asp-action="Index" class="btn btn-secondary ml-2">Clear Filters</a>
     </form>
 </div>
 
+
+<!-- Error Message Display -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <!-- Product Table -->
 <div class="container">
-    <h3>Featured Products</h3>
-    <div id="loadingScreen" style="display:none; margin-top: 20px; text-align: center;">
-        <div class="spinner-border text-primary" role="status"/>
+    <div id="loadingScreen" style="display:none; margin: 2rem 0; text-align: center;">
+        <div class="spinner-border text-primary" role="status"></div>
     </div>
-    <table id="productTable" class="table table-bordered table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Stock Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        
-
-        <tbody id="productTableBody">
-        @await Html.PartialAsync("_ProductTablePartial", Model)
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table id="productTable" class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr class="bg-primary text-white">
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Stock Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="productTableBody">
+                @await Html.PartialAsync("_ProductTablePartial", Model)
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @section Scripts {
@@ -94,9 +145,7 @@
         function loadProducts() {
             // Show the loading spinner when AJAX request starts
             $("#loadingScreen").show();
-
-            // Hide the product table while loading
-            $("#productTable").hide();
+            $("#productTable").parent().hide();
 
             let query = $("#searchQuery").val();
             let category = $("#category").val();
@@ -112,23 +161,17 @@
                     sortBy: sortBy,
                     lowStockFilter: lowStockFilter
                 },
-                type: "GET", // Ensure the request is GET
+                type: "GET",
                 success: function (result) {
-                    // Introduce a delay (e.g., 1 second) before hiding the loading screen and showing the data
                     setTimeout(function() {
-                        // Hide the loading spinner after the data is loaded
                         $("#loadingScreen").hide();
-
-                        // Update the product table with the new data
                         $("#productTableBody").html(result);
-
-                        // Show the table once the data has been updated
-                        $("#productTable").show();
+                        $("#productTable").parent().show();
                     }, 200);
                 },
                 error: function () {
-                    // Hide the loading spinner if there's an error
                     $("#loadingScreen").hide();
+                    $("#productTable").parent().show();
                     alert("An error occurred while loading the data.");
                 }
             });

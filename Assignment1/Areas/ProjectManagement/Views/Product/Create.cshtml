@@ -3,43 +3,87 @@
 @{
     ViewData["Title"] = "Create Product";
 }
+<style>
+    .center-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
 
-<h2>Create Product</h2>
+    .create-product-container {
+        width: 100%;
+        max-width: 600px;
+        padding: 1rem;
+    }
 
-<form asp-action="Create">
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-    </div>
+    .form-control, .btn {
+        border-radius: 0.75rem;
+    }
 
-    <div class="form-group mr-3">
-        <label for="category" class="mr-2">Category:</label>
-        <select class="form-control" id="category" name="category">
-            <option value="">All Categories</option>
-            @foreach (var category in ViewBag.Categories)
-            {
-                <option value="@category.Name" selected="@(Context.Request.Query["category"] == category.Name ? "selected" : null)">@category.Name</option>
-            }
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="Price" class="control-label"></label>
-        <input asp-for="Price" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Quantity" class="control-label"></label>
-        <input asp-for="Quantity" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="LowStockThreshold" class="control-label"></label>
-        <input asp-for="LowStockThreshold" class="form-control" />
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-    </div>
-</form>
+    h2 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+</style>
+
+<div class="center-wrapper">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="create-product-container">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-control" id="category" name="category">
+                    <option value="">All Categories</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.Name" selected="@(Context.Request.Query["category"] == category.Name ? "selected" : null)">
+                            @category.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="form-label"></label>
+                <input asp-for="Price" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Quantity" class="form-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LowStockThreshold" class="form-label"></label>
+                <input asp-for="LowStockThreshold" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary btn-lg" />
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
 </div>

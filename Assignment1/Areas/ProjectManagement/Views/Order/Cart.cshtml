@@ -5,6 +5,43 @@
     decimal grandTotal = Model.Sum(item => item.UnitPrice * item.Quantity);
 }
 
+
+<style>
+
+    h2 {
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .table {
+        border-radius: 1rem;
+        overflow: hidden;
+        background-color: white;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    .table thead {
+        color: white;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+    
+
+    .btn-danger {
+        border-radius: 0.5rem;
+        padding: 0.375rem 0.75rem;
+    }
+    
+
+    tfoot td {
+        font-weight: 600;
+        background-color: #f8f9fa;
+    }
+</style>
+
 <h2>@ViewData["Title"]</h2>
 
 @if (!Model.Any())
@@ -13,14 +50,19 @@
 }
 else
 {
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info mt-3">@TempData["Message"]</div>
+    }
+    
     <table class="table table-bordered">
         <thead>
-        <tr>
+        <tr class="bg-primary">
             <th>Product</th>
             <th>Unit Price</th>
             <th>Quantity</th>
             <th>Total</th>
-            <th>Action</th> <!-- 👈 NEW -->
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>

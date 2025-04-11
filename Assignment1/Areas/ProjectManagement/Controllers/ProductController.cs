@@ -28,6 +28,9 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         // GET: Product/Index
         public async Task<IActionResult> Index(string searchQuery, string category, string sortBy, bool lowStockFilter = false)
         {
+            _logger.LogInformation("Accessing Product Index with search: {SearchQuery}, category: {Category}, sort: {SortBy}, lowStock: {LowStock} at {Time}", 
+                searchQuery, category, sortBy, lowStockFilter, DateTime.Now);
+            
             try
             {
                 // Start with all products
@@ -81,7 +84,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
                 // Execute the query and pass products to the view
                 var products = await productsQuery.ToListAsync();
             
-                _logger.LogInformation("Accessed ProductController Index at {Time}", DateTime.Now);
+                _logger.LogInformation("Successfully retrieved {Count} products at {Time}", products.Count, DateTime.Now);
                 return View(products);
             }
             catch (Exception ex)
@@ -95,6 +98,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         // GET: Product/Create
         public async Task<IActionResult> Create()
         {
+            _logger.LogInformation("Accessing Product Create view at {Time}", DateTime.Now);
             try
             {
                 // Fetch categories for the dropdown
@@ -129,6 +133,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         [ValidateAntiForgeryToken] // Add anti-forgery token for security
         public async Task<IActionResult> Create(Product product)
         {
+            _logger.LogInformation("Attempting to create product {ProductName} at {Time}", product.Name, DateTime.Now);
             if (!await IsUserAdmin())
             {
                 _logger.LogWarning("Permission to create product was denied.");
@@ -141,6 +146,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
                 // Add the product to the database
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("Product {ProductName} created successfully at {Time}", product.Name, DateTime.Now);
                 TempData["SuccessMessage"] = "Product created successfully!";
                 return RedirectToAction(nameof(Index));
             }
@@ -176,10 +182,12 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         // GET: Product/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
+            _logger.LogInformation("Accessing Product Edit view for ID {Id} at {Time}", id, DateTime.Now);
             // Find the product by ID
             var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
+                _logger.LogWarning("Product with ID {Id} not found at {Time}", id, DateTime.Now);
                 return NotFound();
             }
 
@@ -204,6 +212,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         [ValidateAntiForgeryToken] // Add anti-forgery token for security
         public async Task<IActionResult> Edit(int id, Product product)
         {
+            _logger.LogInformation("Attempting to edit product with ID {Id} at {Time}", id, DateTime.Now);
             if (!await IsUserAdmin())
             {
                 _logger.LogWarning("Permission to edit product was denied.");
@@ -223,6 +232,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
                     // Update the product in the database
                     _context.Update(product);
                     await _context.SaveChangesAsync();
+                    _logger.LogInformation("Product with ID {Id} updated successfully at {Time}", id, DateTime.Now);
                     TempData["SuccessMessage"] = "Product updated successfully!";
                 }
                 catch (DbUpdateConcurrencyException)
@@ -249,10 +259,12 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         // GET: Product/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
+            _logger.LogInformation("Accessing Product Delete view for ID {Id} at {Time}", id, DateTime.Now);
             // Find the product by ID
             var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
+                _logger.LogWarning("Product with ID {Id} not found at {Time}", id, DateTime.Now);
                 return NotFound();
             }
             return View(product);
@@ -263,12 +275,20 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         [ValidateAntiForgeryToken] // Add anti-forgery token for security
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            _logger.LogInformation("Attempting to delete product with ID {Id} at {Time}", id, DateTime.Now);
+            if (!await IsUserAdmin())
+            {
+                _logger.LogWarning("Permission to delete product was denied.");
+                TempData["ErrorMessage"] = "You do not have permission to delete a product.";
+                return RedirectToAction(nameof(Index));
+            }
             // Find the product by ID and remove it
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("Product with ID {Id} deleted successfully at {Time}", id, DateTime.Now);
                 TempData["SuccessMessage"] = "Product deleted successfully!";
             }
             else
@@ -287,6 +307,8 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
         [HttpGet]
         public async Task<IActionResult> Search(string searchQuery, string category, string sortBy, bool lowStockFilter = false)
         {
+            _logger.LogInformation("Performing product search with search: {SearchQuery}, category: {Category}, sort: {SortBy}, lowStock: {LowStock} at {Time}", 
+                searchQuery, category, sortBy, lowStockFilter, DateTime.Now);
             var productsQuery = _context.Products.AsQueryable();
             
             if (!string.IsNullOrEmpty(searchQuery))
@@ -325,6 +347,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             }
 
             var products = await productsQuery.ToListAsync();
+            _logger.LogInformation("Search returned {Count} products at {Time}", products.Count, DateTime.Now);
             return PartialView("_ProductTablePartial", products);
         }
 

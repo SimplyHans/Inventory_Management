@@ -1,26 +1,36 @@
 @model IEnumerable<Assignment1.Areas.ProjectManagement.Models.Product>
 
-@foreach (var product in Model)
+@if (Model != null && Model.Any())
+{
+    @foreach (var product in Model)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>@product.Category</td>
+            <td>@product.Price.ToString("C")</td>
+            <td>@product.Quantity</td>
+            <td>
+                @if (product.Quantity < product.LowStockThreshold)
+                {
+                    <span class="badge badge-danger" style="background-color: #dc3545; color: white;">Low Stock</span>
+                }
+                else
+                {
+                    <span class="badge badge-success" style="background-color: #28a745; color: white;">In Stock</span>
+                }
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary btn-sm">Details</a>
+                <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+    }
+}
+else
 {
     <tr>
-        <td>@product.Name</td>
-        <td>@product.Category</td>
-        <td>@product.Price.ToString("C")</td>
-        <td>@product.Quantity</td>
-        <td>
-            @if (product.Quantity < product.LowStockThreshold)
-            {
-                <span class="badge badge-danger" style="background-color: #dc3545; color: white;">Low Stock</span>
-            }
-            else
-            {
-                <span class="badge badge-success" style="background-color: #28a745; color: white;">In Stock</span>
-            }
-        </td>
-        <td>
-            <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary btn-sm">Details</a>
-            <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm">Edit</a>
-            <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Delete</a>
-        </td>
+        <td colspan="6" class="text-center">No products available.</td>
     </tr>
 }
+
