@@ -4,6 +4,7 @@ using Assignment1.Models; // Ensure this matches your project's namespace
 using Microsoft.EntityFrameworkCore; // Add this for EF Core operations
 using System.Threading.Tasks;
 using Assignment1.Areas.ProjectManagement.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Assignment1.Areas.ProjectManagement.Controllers; 
@@ -15,12 +16,14 @@ public class CategoryController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<CategoryController> _logger;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     // Inject ApplicationDbContext and ILogger via constructor
-    public CategoryController(ApplicationDbContext context, ILogger<CategoryController> logger)
+    public CategoryController(ApplicationDbContext context, ILogger<CategoryController> logger, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _logger = logger;
+        _userManager = userManager;
     }
 
     // GET: Category/Index
@@ -39,6 +42,20 @@ public class CategoryController : Controller
             return View("Error");
         }
     }
+    
+    private async Task<bool> IsUserAdmin()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return false;
+        }
+
+        // Check the IsAdmin property of the user
+        return user.IsAdmin;
+    }
+    
+    
 
     // GET: Category/Create
     public IActionResult Create()
@@ -63,6 +80,12 @@ public class CategoryController : Controller
         try
         {
             _logger.LogInformation("Attempting to create category at {Time}", DateTime.Now);
+            if (!await IsUserAdmin())
+            {
+                _logger.LogWarning("Permission to create category was denied.");
+                TempData["ErrorMessage"] = "You do not have permission to category a product.";
+                return RedirectToAction(nameof(Index));
+            }
             if (ModelState.IsValid)
             {
                 // Add the category to the database asynchronously
