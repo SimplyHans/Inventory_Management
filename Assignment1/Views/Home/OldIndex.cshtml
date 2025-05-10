@@ -1,4 +1,4 @@
-﻿@model Assignment1.Areas.ProjectManagement.Models.HomeIndexViewModel
+@model Assignment1.Areas.ProjectManagement.Models.HomeIndexViewModel
 
 @{
     ViewData["Title"] = "Home";
@@ -64,7 +64,7 @@
             <!-- Search -->
             <div class="form-group">
                 <label for="searchQuery">Search:</label>
-                <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Search Product..." value="@Context.Request.Query["searchQuery"]">
+                <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Product name..." value="@Context.Request.Query["searchQuery"]">
             </div>
 
             <!-- Category -->
@@ -117,11 +117,23 @@
             <div class="spinner-border text-primary" role="status"></div>
         </div>
 
-        <div id="productContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3 gx-4">
-            @await Html.PartialAsync("_HomeItems", Model)
+        <div class="table-responsive">
+            <table id="productTable" class="table table-bordered table-striped mt-3">
+                <thead class="thead-dark">
+                <tr class="bg-primary text-white">
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Stock Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="productTableBody">
+                @await Html.PartialAsync("_HomeTablePartial", Model)
+                </tbody>
+            </table>
         </div>
-        
-
     </div>
 </div>
 
@@ -157,11 +169,11 @@
                         $("#loadingScreen").hide();
 
                         // Update the product table with the new data
-                        $("#productContainer").html(result);
+                        $("#productTableBody").html(result);
 
                         // Show the table once the data has been updated
-                        $("#productContainer").show();
-                    }, 200);  // 1000 milliseconds = 1 second delay
+                        $("#productTable").show();
+                    }, 1000);  // 1000 milliseconds = 1 second delay
                 },
                 error: function () {
                     // Hide the loading spinner if there's an error

@@ -2,11 +2,11 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary py-1">
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark py-1" style="background-color: #01e18e; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;">
 
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-white" asp-area="" asp-controller="Home" asp-action="Index">
-            <i class="fa-solid fa-diagram-project me-2"></i>Inventory
+        <a class="navbar-brand fw-bold text-light" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fa-solid fa-boxes-stacked"></i> Invenify
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +16,7 @@
         <div class="collapse navbar-collapse w-100" id="mainNavbar">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link text-light fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
 
                 @{
@@ -25,15 +25,15 @@
                 @if (user != null && user.IsAdmin && SignInManager.IsSignedIn(User))
                 {
                     <li class="nav-item">
-                        <a class="nav-link text-white fw-semibold" asp-area="ProjectManagement" asp-controller="Product" asp-action="Index">Management</a>
+                        <a class="nav-link text-light fw-semibold" asp-area="ProjectManagement" asp-controller="Product" asp-action="Index">Management</a>
                     </li>
                 }
 
                 <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" asp-area="ProjectManagement" asp-controller="Order" asp-action="Cart">Cart</a>
+                    <a class="nav-link text-light fw-semibold" asp-area="ProjectManagement" asp-controller="Order" asp-action="Cart">Cart</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" asp-area="ProjectManagement" asp-controller="Order" asp-action="Track">Orders</a>
+                    <a class="nav-link text-light fw-semibold" asp-area="ProjectManagement" asp-controller="Order" asp-action="Track">Orders</a>
                 </li>
             </ul>
 
@@ -41,25 +41,25 @@
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage Your Profile">
+                        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage Your Profile">
                             <i class="fa-solid fa-user-gear me-1"></i> Profile
                         </a>
                     </li>
                     <li class="nav-item">
                         <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
-                            <button type="submit" class="nav-link btn btn-link text-white fw-semibold px-2" style="cursor: pointer;">Logout</button>
+                            <button type="submit" class="nav-link btn btn-link text-light fw-semibold px-2" style="cursor: pointer;">Logout</button>
                         </form>
                     </li>
                 }
                 else
                 {
                     <li class="nav-item">
-                        <a class="nav-link text-white fw-semibold" asp-area="Identity" asp-page="/Account/Login">
+                        <a class="nav-link text-light fw-semibold" asp-area="Identity" asp-page="/Account/Login">
                             <i class="fa-solid fa-right-to-bracket me-1"></i> Login
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white fw-semibold" asp-area="Identity" asp-page="/Account/Register">
+                        <a class="nav-link text-light fw-semibold" asp-area="Identity" asp-page="/Account/Register">
                             <i class="fa-solid fa-user-plus me-1"></i> Register
                         </a>
                     </li>

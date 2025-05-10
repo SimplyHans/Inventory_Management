@@ -181,7 +181,7 @@ namespace Assignment1.Controllers // Ensure this matches your project's namespac
                 };
                 _logger.LogInformation("Search returned {Count} products at {Time}", products.Count, DateTime.Now);
                 // Return the partial view with the model
-                return PartialView("_HomeTablePartial", viewModel);
+                return PartialView("_HomeItems", viewModel);
             }
             catch (Exception ex)
             {

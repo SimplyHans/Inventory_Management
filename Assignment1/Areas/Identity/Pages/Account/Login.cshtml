@@ -10,7 +10,7 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        margin-top: 2rem;
+        margin-top: 2.5rem;
     }
 
     .login-container {
@@ -29,13 +29,12 @@
 
     h1, h2 {
         text-align: center;
-        margin-bottom: 1rem;
     }
 </style>
 
 <div class="center-wrapper">
-    <h1>@ViewData["Title"]</h1>
-    <h2>Use a local account to log in.</h2>
+    <h1>Welcome back!</h1>
+    <h2 style="color: #515151; font-size: 20px;">We are so excited to see you again!</h2>
 
     <div class="login-container">
         <section>
@@ -58,8 +57,9 @@
                     </label>
                 </div>
                 <div class="d-grid mb-3">
-                    <button id="login-submit" type="submit" class="btn btn-primary btn-lg">Log in</button>
+                    <button id="login-submit" type="submit" class="btn btn-lg" style="background-color: #01e18e; color: white; font-weight: bold;">Log in</button>
                 </div>
+                
                 <div class="text-center">
                     <p>
                         <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
