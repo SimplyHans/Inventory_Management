@@ -34,7 +34,7 @@
                 <form asp-area="ProjectManagement" asp-controller="Order" asp-action="AddToCart" method="post" class="align-items-center justify-content-center d-flex gap-2" style="padding: 0;">
                     <input type="hidden" name="productId" value="@product.Id"/>
                     <input type="number" name="quantity" value="1" min="1" max="@product.Quantity" class="form-control" style="width: 60px; border-radius: 50px;"/>
-                    <button type="submit" class="btn" style="border-radius: 50px; background-color: #01e18e;"><i class="fa-solid fa-plus"></i> Cart</button>
+                    <button type="submit" class="btn" style="border-radius: 50px; padding-left: 32px; padding-right: 32px; background-color: #01e18e; color: white; font-weight: bolder;"><i class="fa-solid fa-plus"></i> Cart</button>
                 </form>
             </div>
         </div>
