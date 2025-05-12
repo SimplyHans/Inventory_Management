@@ -1,20 +1,20 @@
 @model IEnumerable<Assignment1.Areas.ProjectManagement.Models.Product>
 
 @{
-    ViewData["Title"] = "Inventory Management";
+    ViewData["Title"] = "Management";
 }
 
 <style>
     .product-index-container {
         max-width: 1400px;
-        margin: 0 auto;
+        
     }
 
     .filter-row {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-        margin-bottom: 1.5rem;
+        margin: 0 2.5rem 1.5rem 2.5rem;
         align-items: flex-end;
     }
 
@@ -36,13 +36,8 @@
         border: 1px solid #ccc;
     }
     
-
-    .btn-success {
-        margin-right: 1rem;
-    }
-
-    .table {
-        border-radius: 1rem;
+    .table{
+        border-radius: 8px;
         overflow: hidden;
     }
 
@@ -52,19 +47,12 @@
 </style>
 
 <div class="product-index-container">
-    <h2 class="mb-2 fw-semibold text-start">@ViewData["Title"]</h2>
-
-
-    <div class="d-flex mb-3">
-        <a asp-action="Create" class="btn btn-success">Create Product</a>
-        <a asp-controller="Category" asp-action="Index" class="btn btn-success">Add New Category</a>
-    </div>
 
     <form method="get" asp-action="Index" class="filter-row">
         <!-- Search -->
         <div class="form-group">
             <label for="searchQuery">Search:</label>
-            <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Product name..." value="@Context.Request.Query["searchQuery"]">
+            <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Search Product..." value="@Context.Request.Query["searchQuery"]">
         </div>
 
         <!-- Category -->
@@ -109,6 +97,15 @@
         @TempData["ErrorMessage"]
     </div>
 }
+<div class="d-flex justify-content-between mb-1">
+    <div class="ms-3">
+        <h2 style="font-weight: bolder;">Products</h2>
+    </div>
+    <div class="me-3">
+        <a asp-action="Create" class="btn me-2 text-white" style="background-color: #01e18e; border-radius: 8px;">Create Product</a>
+        <a asp-controller="Category" asp-action="Index" class="btn text-white" style="background-color: #01e18e; border-radius: 8px;">Add Category</a>
+    </div>
+</div>
 
 <!-- Product Table -->
 <div class="container">
@@ -116,15 +113,15 @@
         <div class="spinner-border text-primary" role="status"></div>
     </div>
     <div class="table-responsive">
-        <table id="productTable" class="table table-bordered table-striped">
+        <table id="productTable" class="table">
             <thead class="thead-dark">
-            <tr class="bg-primary text-white">
+            <tr class="text-white" style="background-color:#34343a;">
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Stock Status</th>
-                <th>Actions</th>
+                <th>Status</th>
+                <th></th>
             </tr>
             </thead>
             <tbody id="productTableBody">
@@ -167,6 +164,23 @@
                         $("#loadingScreen").hide();
                         $("#productTableBody").html(result);
                         $("#productTable").parent().show();
+
+                        // Re-inject styles from partial (if they were stripped)
+                        if (!document.getElementById("box-style")) {
+                            const style = document.createElement("style");
+                            style.id = "box-style";
+                            style.innerHTML = `
+                .box {
+                    padding: 20px;
+                    transition: 0.3s;
+                }
+
+                .box:hover {
+                    background-color: #dcdcdc;
+                }
+            `;
+                            document.head.appendChild(style);
+                        }
                     }, 200);
                 },
                 error: function () {

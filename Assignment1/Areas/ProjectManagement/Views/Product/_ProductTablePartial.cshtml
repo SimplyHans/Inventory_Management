@@ -4,26 +4,28 @@
 {
     @foreach (var product in Model)
     {
-        <tr>
-            <td>@product.Name</td>
-            <td>@product.Category</td>
-            <td>@product.Price.ToString("C")</td>
-            <td>@product.Quantity</td>
-            <td>
-                @if (product.Quantity < product.LowStockThreshold)
-                {
-                    <span class="badge badge-danger" style="background-color: #dc3545; color: white;">Low Stock</span>
-                }
-                else
-                {
-                    <span class="badge badge-success" style="background-color: #28a745; color: white;">In Stock</span>
-                }
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary btn-sm">Details</a>
-                <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm">Edit</a>
-                <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+        <tr class="box clickable-row" onclick="window.location.href='@Url.Action("Details", "Product", new { id = product.Id, area = "ProjectManagement" })'">
+            <a>
+                <td>@product.Name</td>
+                <td>@product.Category</td>
+                <td>@product.Price.ToString("C")</td>
+                <td>@product.Quantity</td>
+                <td>
+                    @if (product.Quantity < product.LowStockThreshold)
+                    {
+                        <span class="badge badge-danger" style="background-color: rgba(232,47,96,0.84); color: white;">Low Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-success" style="background-color: #01e18e; color: white;">In Stock</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@product.Id" style="color: #ff9900; margin-right: 8px;"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a asp-action="Delete" asp-route-id="@product.Id" style="color: #e1004e;"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </a>
+
         </tr>
     }
 }

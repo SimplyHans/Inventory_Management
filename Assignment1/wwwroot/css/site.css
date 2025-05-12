@@ -20,3 +20,13 @@ html {
 body {
   margin-bottom: 0;
 }
+
+.box {
+  padding: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.box:hover {
+  background-color: #dcdcdc;
+}
