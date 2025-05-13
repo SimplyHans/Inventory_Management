@@ -1,31 +1,81 @@
+@using Assignment1.Areas.ProjectManagement.Models
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Assignment1.Areas.ProjectManagement.Models.Product
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Project Details"; // sets the title of the view to "Project Details
 }
 
-<h2>Project Details</h2>
+<div class="mb-3">
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn"><i class="fa-solid fa-arrow-left"></i> Back Home</a>
+    <a asp-area="ProjectManagement" asp-controller="Product" asp-action="Index" class="btn"><i class="fa-solid fa-bars-progress"></i> View Management</a>
+</div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">@Model.Name</div>
-        @*<div class="card-text">@Model.Category</div>*@
+<div class="d-flex justify-content-center">
+    <div class="me-3">
+        <div style="background-color: #f4f4f4; height: 30vw; width: 30vw; border-radius: 10px;">
+
+        </div>
+    </div>
+
+
+    <div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 style="font-size: 25px; font-weight: bold;" class="mb-0">@Model.Name</h2>
+
+            @{
+                var user = UserManager.GetUserAsync(User).Result;
+            }
+            @if (user != null && user.IsAdmin && SignInManager.IsSignedIn(User))
+            {
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" style="background-color: #ff9900; border-radius: 50px; margin-right: 8px; font-weight: bold;" class="py-2 px-3 text-white text-decoration-none"><i class="fa-solid fa-pen-to-square"></i>  Edit</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" style="background-color: #e1004e; border-radius: 50px;" class="py-2 px-3"><i class="fa-solid fa-trash text-white"></i></a>
+                </div>
+            }
+
+        </div>
         
-        <dl class="row">
-            <dt class="col-sm-3">Product Id</dt>
-            <dt class="col-sm-9">@Model.Id</dt>
-            
 
-            <dt class="col-sm-3">Price</dt>
-            <dt class="col-sm-9">@Model.Price</dt>
 
-            <dt class="col-sm-3">Quantity</dt>
-            <dt class="col-sm-9">@Model.Quantity</dt>
+        <h3 style="padding-top: 5px; padding-bottom: 2px;">@Model.Price.ToString("C")</h3>
 
-        </dl>
-    
+        <div style="background-color: rgba(244,244,244,0.8); border-radius: 8px; padding: 10px; width: 50vw;">
+            <p style="font-size: 15px; font-weight: bold;" class="mb-1">Product Details</p>
+            <p style="font-size: 15px; color: gray;" class="mb-1">
+                Category:  
+                @Model.Category
+            </p>
 
+            <p style="font-size: 15px; color: gray;" class="mb-1">ID:  @Model.Id</p>
+
+            <p style="font-size: 15px; color: gray;" class="mb-1">
+                Quantity:  
+                @Model.Quantity
+                @if (Model.Quantity < Model.LowStockThreshold)
+                {
+                    <span class="badge badge-danger" style="background-color: rgba(232,47,96,0.84); color: white;">Low Stock</span>
+                }
+                else
+                {
+                    <span class="badge badge-success" style="background-color: #01e18e; color: white;">In Stock</span>
+                }
+            </p>
+        </div>
         
-        <a asp-controller="Product" asp-action="Index" class="btn btn-secondary">Back to Project List</a>
+        
+
+        <div style="width: 50vw; margin-top: 10px;">
+            <form asp-area="ProjectManagement" asp-controller="Order" asp-action="AddToCart" method="post" class="d-flex align-items-center gap-2">
+                <input type="hidden" name="productId" value="@Model.Id"/>
+                <input type="number" name="quantity" value="1" min="1" max="@Model.Quantity" class="form-control  py-3" style="width: 60px; border-radius: 10px;"/>
+                <button type="submit" class="btn py-3" style="border-radius: 10px; background-color: #01e18e; color: white; font-weight: bolder; flex: 1;">Add to Cart</button>
+            </form>
+        </div>
+
     </div>
 </div>
+
