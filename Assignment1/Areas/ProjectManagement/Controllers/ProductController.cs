@@ -145,6 +145,18 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             
             if (ModelState.IsValid)
             {
+                if (product.Img != null)
+                {
+                    string filePath = "Product/Image/";
+                    filePath += Guid.NewGuid().ToString() + "_" + product.Img.FileName;
+                        
+                    product.ImgPath = filePath;
+                        
+                    string serverFolder = Path.Combine(_hostEnvironment.WebRootPath, filePath);
+                        
+                    await product.Img.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                }
+                
                 // Add the product to the database
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
@@ -231,7 +243,6 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             {
                 try
                 {
-                    // Update the product in the database
                     if (product.Img != null)
                     {
                         string filePath = "Product/Image/";
@@ -244,6 +255,7 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
                         await product.Img.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                     }
                     
+                    // Update the product in the database
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                     _logger.LogInformation("Product with ID {Id} updated successfully at {Time}", id, DateTime.Now);

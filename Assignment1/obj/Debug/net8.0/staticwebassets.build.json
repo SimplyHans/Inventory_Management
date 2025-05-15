@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "P8a7Jev3if+PNI1HPs11Q31XLXjlDdPV95hc0GXHJJs=",
+  "Hash": "BOv2Ll1X/q8rc1d94R0EAWb0gx+wwRH29COhNFdJNLU=",
   "Source": "Assignment1",
   "BasePath": "_content/Assignment1",
   "Mode": "Default",
@@ -2352,6 +2352,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Product\\Image\\ea554a9c-1d70-427b-a78d-12499043bf1d_PlaceholderPic.png"
+    },
+    {
+      "Identity": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\wwwroot\\Product\\Image\\fdae3360-504d-4d86-b217-bfd9b09dfe27_InvManPortfolioPic.png",
+      "SourceId": "Assignment1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Owner\\YR 2 Sem 2 Web Dev\\redone-branch\\comp2139_assignment1\\Assignment1\\wwwroot\\",
+      "BasePath": "_content/Assignment1",
+      "RelativePath": "Product/Image/fdae3360-504d-4d86-b217-bfd9b09dfe27_InvManPortfolioPic.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Product\\Image\\fdae3360-504d-4d86-b217-bfd9b09dfe27_InvManPortfolioPic.png"
     }
   ]
 }

@@ -112,7 +112,7 @@
             <div class="spinner-border text-primary" role="status"></div>
         </div>
 
-        <div id="productContainer" class="row row-cols-2 row-cols-md-3 row-cols-lg-5 gy-2">
+        <div id="productContainer" class="d-flex flex-wrap gap-3 justify-content-start mt-3">
             @await Html.PartialAsync("_HomeItems", Model)
         </div>
         

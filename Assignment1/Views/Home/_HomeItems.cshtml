@@ -16,8 +16,8 @@
     
     @foreach (var product in Model.Products)
     {
-        <div class="card-body">
-            <div class="h-100 p-2 item" style="width: 100%; min-width: 170px; max-width: 220px; border-radius: 12px;">
+        <div>
+            <div class="h-100 p-2 item" style="width: 200px; border-radius: 12px;">
                 <a asp-area="ProjectManagement" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="text-decoration-none text-black">
                     <div class="position-relative w-100" style="padding-top: 100%; border-radius: 10px; overflow: hidden; background-color: #f4f4f4;">
                         @if (product.ImgPath != null)
@@ -27,8 +27,8 @@
                     </div>
 
 
-                    <h2 style="margin: 0; padding-top: 3px; font-size: 20px;">@product.Name</h2>
-                    <p style="margin: 0; color: #575757;">@product.Category • @product.Quantity
+                    <h2 style="margin: 0; padding-top: 3px; font-size: 17px;">@product.Name</h2>
+                    <p style="margin: 0; color: #575757; font-size: 12px;">@product.Category • @product.Quantity
                         @if (product.Quantity < product.LowStockThreshold)
                         {
                             <span class="badge" style="background-color: rgba(232,47,96,0.84); color: white; border-radius: 50px">Low Stock</span>
@@ -54,31 +54,6 @@
 
             </div>
         </div>
-
-        
-        @* <tr> *@
-        @*     <td>@product.Name</td> *@
-        @*     <td>@product.Category</td> *@
-        @*     <td>@product.Price.ToString("C")</td> *@
-        @*     <td>@product.Quantity</td> *@
-        @*     <td> *@
-        @*         @if (product.Quantity < product.LowStockThreshold) *@
-        @*         { *@
-        @*             <span class="badge" style="background-color: #dc3545; color: white;">Low Stock</span> *@
-        @*         } *@
-        @*         else *@
-        @*         { *@
-        @*             <span class="badge" style="background-color: #28a745; color: white;">In Stock</span> *@
-        @*         } *@
-        @*     </td> *@
-        @*     <td> *@
-        @*         <form asp-area="ProjectManagement" asp-controller="Order" asp-action="AddToCart" method="post"> *@
-        @*             <input type="hidden" name="productId" value="@product.Id" /> *@
-        @*             <input type="number" name="quantity" value="1" min="1" max="@product.Quantity" class="form-control d-inline-block w-auto mr-2" /> *@
-        @*             <button type="submit" class="btn btn-success">Add to Cart</button> *@
-        @*         </form> *@
-        @*     </td> *@
-        @* </tr> *@
     }
 }
 else

@@ -992,5 +992,21 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Product\Image\ea554a9c-1d70-427b-a78d-12499043bf1d_PlaceholderPic.png))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Product\Image\fdae3360-504d-4d86-b217-bfd9b09dfe27_InvManPortfolioPic.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>Assignment1</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Assignment1</BasePath>
+      <RelativePath>Product/Image/fdae3360-504d-4d86-b217-bfd9b09dfe27_InvManPortfolioPic.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Product\Image\fdae3360-504d-4d86-b217-bfd9b09dfe27_InvManPortfolioPic.png))</OriginalItemSpec>
+    </StaticWebAsset>
   </ItemGroup>
 </Project>
