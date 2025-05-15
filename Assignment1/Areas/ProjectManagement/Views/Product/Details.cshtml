@@ -7,11 +7,16 @@
 
 @{
     ViewData["Title"] = "Details";
+    var user = UserManager.GetUserAsync(User).Result;
 }
 
 <div class="mb-3">
     <a asp-area="" asp-controller="Home" asp-action="Index" class="btn"><i class="fa-solid fa-arrow-left"></i> Back Home</a>
-    <a asp-area="ProjectManagement" asp-controller="Product" asp-action="Index" class="btn"><i class="fa-solid fa-bars-progress"></i> View Management</a>
+    @if (user != null && user.IsAdmin && SignInManager.IsSignedIn(User))
+    {
+        <a asp-area="ProjectManagement" asp-controller="Product" asp-action="Index" class="btn"><i class="fa-solid fa-bars-progress"></i> View Management</a>
+    }
+    
 </div>
 
 <div class="d-flex justify-content-center">
@@ -28,15 +33,12 @@
     <div>
         <div class="d-flex justify-content-between align-items-center">
             <h2 style="font-size: 25px; font-weight: bold;" class="mb-0">@Model.Name</h2>
-
-            @{
-                var user = UserManager.GetUserAsync(User).Result;
-            }
+            
             @if (user != null && user.IsAdmin && SignInManager.IsSignedIn(User))
             {
                 <div>
-                    <a asp-action="Edit" asp-route-id="@Model.Id" style="background-color: #ff9900; border-radius: 50px; margin-right: 8px; font-weight: bold;" class="py-2 px-3 text-white text-decoration-none"><i class="fa-solid fa-pen-to-square"></i>  Edit</a>
-                    <a asp-action="Delete" asp-route-id="@Model.Id" style="background-color: #e1004e; border-radius: 50px;" class="py-2 px-3"><i class="fa-solid fa-trash text-white"></i></a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" style="background-color: #ff9900; border-radius: 50px; margin-right: 8px;" class="py-2 px-3 text-white text-decoration-none"><i class="fa-regular fa-pen-to-square"></i> Edit</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" style="background-color: #e1004e; border-radius: 50px;" class="py-2 px-3 text-white"><i class="fa-regular fa-trash-can"></i></a>
                 </div>
             }
 

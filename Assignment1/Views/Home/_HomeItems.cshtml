@@ -16,43 +16,40 @@
     
     @foreach (var product in Model.Products)
     {
-        <div>
-            <div class="h-100 p-2 item" style="width: 200px; border-radius: 12px;">
-                <a asp-area="ProjectManagement" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="text-decoration-none text-black">
-                    <div class="position-relative w-100" style="padding-top: 100%; border-radius: 10px; overflow: hidden; background-color: #f4f4f4;">
-                        @if (product.ImgPath != null)
-                        {
-                            <img src='@product.ImgPath' class="position-absolute top-0 start-0 w-100 h-100" style="border-radius: 10px; overflow: hidden; border: none; box-shadow: none; object-fit: cover;"/>
-                        }
-                    </div>
+        <div class="h-100 p-2 item" style="width: 200px; border-radius: 12px;">
+            <a asp-area="ProjectManagement" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="text-decoration-none text-black">
+                <div class="position-relative w-100" style="padding-top: 100%; border-radius: 10px; overflow: hidden; background-color: #f4f4f4;">
+                    @if (product.ImgPath != null)
+                    {
+                        <img src='@product.ImgPath' class="position-absolute top-0 start-0 w-100 h-100" style="border-radius: 10px; overflow: hidden; border: none; box-shadow: none; object-fit: cover;"/>
+                    }
+                </div>
 
 
-                    <h2 style="margin: 0; padding-top: 3px; font-size: 17px;">@product.Name</h2>
-                    <p style="margin: 0; color: #575757; font-size: 12px;">@product.Category • @product.Quantity
-                        @if (product.Quantity < product.LowStockThreshold)
-                        {
-                            <span class="badge" style="background-color: rgba(232,47,96,0.84); color: white; border-radius: 50px">Low Stock</span>
-                        }
-                        else
-                        {
-                            <span class="badge" style="background-color: #01e18e; color: white; border-radius: 50px;">In Stock</span>
-                        }
-                    </p>
-
-
-
-                    <h3 style="padding-top: 5px; padding-bottom: 2px;">$@product.Price</h3>
+                <h2 style="margin: 0; padding-top: 3px; font-size: 18px;">@product.Name</h2>
+                <p style="margin: 0; color: #575757; font-size: 12px;">@product.Category • @product.Quantity
+                    @if (product.Quantity < product.LowStockThreshold)
+                    {
+                        <span class="badge" style="background-color: rgba(232,47,96,0.84); color: white; border-radius: 50px">Low Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge" style="background-color: #01e18e; color: white; border-radius: 50px;">In Stock</span>
+                    }
+                </p>
 
 
 
-                    <form asp-area="ProjectManagement" asp-controller="Order" asp-action="AddToCart" method="post" class="align-items-center justify-content-center d-flex gap-2" style="padding: 0;">
-                        <input type="hidden" name="productId" value="@product.Id"/>
-                        <input type="hidden" name="quantity" value="1"/>
-                        <button type="submit" class="btn" style="border-radius: 50px; width: 100%; background-color: #01e18e; color: white; font-weight: bolder;"><i class="fa-solid fa-plus"></i> Cart</button>
-                    </form>
-                </a>
+                <h3 style="padding-top: 5px; padding-bottom: 2px;">$@product.Price.ToString("C")</h3>
 
-            </div>
+
+
+                <form asp-area="ProjectManagement" asp-controller="Order" asp-action="AddToCart" method="post" class="align-items-center justify-content-center d-flex gap-2" style="padding: 0;">
+                    <input type="hidden" name="productId" value="@product.Id"/>
+                    <input type="hidden" name="quantity" value="1"/>
+                    <button type="submit" class="btn" style="border-radius: 50px; width: 100%; background-color: #01e18e; color: white; font-weight: bolder;"><i class="fa-solid fa-plus"></i> Cart</button>
+                </form>
+            </a>
         </div>
     }
 }
