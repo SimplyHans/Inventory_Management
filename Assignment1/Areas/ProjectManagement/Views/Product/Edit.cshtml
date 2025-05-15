@@ -43,7 +43,7 @@
     <h2>@ViewData["Title"]</h2>
 
     <div class="edit-product-container">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">
@@ -52,8 +52,13 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="Img" class="form-label" for="customFile"></label>
+                <input asp-for="Img" accept="image/*" id="customFile" class="form-control" />
+            </div>
+
+            <div class="form-group">
                 <label for="category" class="form-label">Category</label>
-                <select class="form-control" id="category" name="category">
+                <select asp-for="Category" class="form-control" id="category" name="category">
                     <option value="">All Categories</option>
                     @foreach (var category in ViewBag.Categories)
                     {

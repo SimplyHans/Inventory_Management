@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Assignment1.Areas.ProjectManagement.Models;
 
@@ -10,6 +11,11 @@ namespace Assignment1.Areas.ProjectManagement.Models;
 
         [Required]
         public string Name { get; set; }
+        
+        [NotMapped]
+        public IFormFile? Img { get; set; }
+        
+        public string? ImgPath { get; set; }
 
         [Required]
         public string Category { get; set; }

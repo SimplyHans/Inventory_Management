@@ -20,7 +20,10 @@
             <div class="h-100 p-2 item" style="width: 100%; min-width: 170px; max-width: 220px; border-radius: 12px;">
                 <a asp-area="ProjectManagement" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="text-decoration-none text-black">
                     <div class="position-relative w-100" style="padding-top: 100%; border-radius: 10px; overflow: hidden; background-color: #f4f4f4;">
-                        <img src="" onerror="this.style.display='none'" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" style="border-radius: 10px; overflow: hidden; border: none; box-shadow: none;" />
+                        @if (product.ImgPath != null)
+                        {
+                            <img src='@product.ImgPath' class="position-absolute top-0 start-0 w-100 h-100" style="border-radius: 10px; overflow: hidden; border: none; box-shadow: none; object-fit: cover;"/>
+                        }
                     </div>
 
 

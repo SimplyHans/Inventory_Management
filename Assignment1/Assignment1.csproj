@@ -41,4 +41,8 @@
       <AdditionalFiles Include="Areas\ProjectManagement\Views\Product\Index.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\Product\Image\" />
+    </ItemGroup>
+
 </Project>

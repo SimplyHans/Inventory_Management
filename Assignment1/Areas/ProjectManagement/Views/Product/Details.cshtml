@@ -6,7 +6,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Project Details"; // sets the title of the view to "Project Details
+    ViewData["Title"] = "Details";
 }
 
 <div class="mb-3">
@@ -17,7 +17,10 @@
 <div class="d-flex justify-content-center">
     <div class="me-3">
         <div style="background-color: #f4f4f4; height: 30vw; width: 30vw; border-radius: 10px;">
-
+            @if (Model.ImgPath != null)
+            {
+                <img src='~/@Model.ImgPath' class="position-relative top-0 start-0 w-100 h-100" style="border-radius: 10px; overflow: hidden; border: none; box-shadow: none; object-fit: cover;"/>
+            }
         </div>
     </div>
 

@@ -13,16 +13,18 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
 
     public class ProductController : Controller
     {
+        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly ILogger<ProductController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
         // Inject ApplicationDbContext via constructor
-        public ProductController(ApplicationDbContext context, ILogger<ProductController> logger, UserManager<ApplicationUser> userManager)
+        public ProductController(ApplicationDbContext context, ILogger<ProductController> logger, UserManager<ApplicationUser> userManager, IWebHostEnvironment hostEnvironment)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Product/Index
@@ -230,6 +232,18 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
                 try
                 {
                     // Update the product in the database
+                    if (product.Img != null)
+                    {
+                        string filePath = "Product/Image/";
+                        filePath += Guid.NewGuid().ToString() + "_" + product.Img.FileName;
+                        
+                        product.ImgPath = filePath;
+                        
+                        string serverFolder = Path.Combine(_hostEnvironment.WebRootPath, filePath);
+                        
+                        await product.Img.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                    }
+                    
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                     _logger.LogInformation("Product with ID {Id} updated successfully at {Time}", id, DateTime.Now);
