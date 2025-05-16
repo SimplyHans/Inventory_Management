@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark p-2 fixed-top" style="background-color: #01e18e; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;">
 
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-light" asp-area="" asp-controller="Home" asp-action="Index">
+        <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: 800;">
             <i class="fa-solid fa-boxes-stacked"></i> Invenify
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -13,10 +13,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse w-100" id="mainNavbar">
+        <div class="collapse navbar-collapse w-100" id="mainNavbar" style="font-weight: 500;">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-light fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
 
                 @{
@@ -25,15 +25,15 @@
                 @if (user != null && user.IsAdmin && SignInManager.IsSignedIn(User))
                 {
                     <li class="nav-item">
-                        <a class="nav-link text-light fw-semibold" asp-area="ProjectManagement" asp-controller="Product" asp-action="Index">Management</a>
+                        <a class="nav-link text-light" asp-area="ProjectManagement" asp-controller="Product" asp-action="Index">Management</a>
                     </li>
                 }
 
                 <li class="nav-item">
-                    <a class="nav-link text-light fw-semibold" asp-area="ProjectManagement" asp-controller="Order" asp-action="Cart">Cart</a>
+                    <a class="nav-link text-light" asp-area="ProjectManagement" asp-controller="Order" asp-action="Cart">Cart</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light fw-semibold" asp-area="ProjectManagement" asp-controller="Order" asp-action="Track">Orders</a>
+                    <a class="nav-link text-light" asp-area="ProjectManagement" asp-controller="Order" asp-action="Track">Orders</a>
                 </li>
             </ul>
 

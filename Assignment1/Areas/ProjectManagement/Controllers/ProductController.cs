@@ -243,6 +243,8 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
             {
                 try
                 {
+                    var existingProduct = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+                    
                     if (product.Img != null)
                     {
                         string filePath = "Product/Image/";
@@ -253,6 +255,10 @@ namespace Assignment1.Areas.ProjectManagement.Controllers;
                         string serverFolder = Path.Combine(_hostEnvironment.WebRootPath, filePath);
                         
                         await product.Img.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                    }
+                    else
+                    {
+                        product.ImgPath = existingProduct.ImgPath;
                     }
                     
                     // Update the product in the database
